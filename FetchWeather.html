@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+       
+       body{
+           background-color: black;
+           
+       }
+
+        .Mcontainer{
+            height: 100vh;
+            width: 100vw;
+            background: rgb(131,58,180);
+            background: linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%);
+            display: flex;
+            justify-content: center;
+        
+          
+        }
+        .BackG{
+            height: 650px;
+            width: 450px;
+            border: solid 1px black;
+            margin-top: 35px;
+            background-image: url(/images/wallpaper.jpg);
+            background-size: cover;
+            background-position: fixed;
+            box-shadow: 10px 10px 50px 10px;
+            animation: slide  1.2s ease forwards;
+        }  
+        @keyframes slide  {
+            0%{
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100%{
+                opacity: 1;
+                transform: translateY(0%);
+            }
+            
+        } 
+        #i1{
+            margin-left: 35px;
+            margin-top: 15px;
+            padding-left: 10px;
+            width: 350px;
+            height: 40px;
+          border-radius: 1rem;
+          background-color: rgb(3, 40, 40);
+          color: rgb(224, 231, 231);
+
+        }
+        #temp{
+            text-align: center;
+            font-size: 4rem;
+            font-family:'Times New Roman', Times, serif;
+            color: rgb(24, 2, 2);
+        }
+        #city{
+            text-align: center;
+            font-size: 1.3rem;
+            color: rgb(12, 1, 1);
+            margin-top: -30px;
+        }
+        #cloudy{
+            margin-left: 170px;
+            height: 120px;
+            width: 120px;
+        }
+        .mid{
+            display: flex;
+            margin-top: 30px;
+            width: 400px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+        .mid img {
+            height: 30px;
+        }
+        #cloud{
+            padding-left: 20px;
+        }
+        #wind{
+
+             padding-left: 15px;   
+        }
+        #humidity{
+            padding-left: 15px;
+        }
+        .head{
+            display: flex;
+        }
+        #i2{
+            height: 35px;
+            width: 35px;
+            margin-top: 20px;
+            border-style: hidden;
+            margin-left: 3px;
+            background-image: url(/images/search.png);
+            background-color: rgb(55, 86, 86);
+            background-size: cover;
+            border-radius:1rem;
+
+        }
+        .mid p{
+            font-size: 1.2rem;
+            color:rgb(32, 3, 3);
+            font-weight: 1000;
+        }
+    </style>
+</head>
+<body>  
+    <div class="Mcontainer">
+        <div class="BackG">
+            <div class="head">
+                <input type="text" placeholder="Search Your City" name="" id="i1"> 
+                <button onclick="SearchCity();" id="i2"></button>
+            </div>
+            <h1 id="temp">40 &deg;C</h1>
+            <p id="city">shirpur</p>
+            <img id="cloudy" src="/images/skkkky.png" alt="">
+
+            <div class="mid">
+                <img id="cloud"  src="/images/sunrise.png" alt="">
+                <p  id="sunrise">75%</p>
+                <img id="wind" src="/images/wind.png" alt="">
+                <p id="wind1">2.5m/s</p>
+                <img id="humidity" src="/images/sunset.png" alt="">
+                <p id="sunset">86%</p>
+
+            </div>
+        </div>
+ 
+    </div>
+    <!-- fetch("https://api.openweathermap.org/data/2.5/weather?q="+cname+"&units=metric&appid=2fecef1bb4f3689f035445ff64b11bac") -->
+
+     <script>
+
+
+       function Search(cname){
+
+            fetch("https://api.openweathermap.org/data/2.5/weather?q="+cname+"&units=metric&appid=2fecef1bb4f3689f035445ff64b11bac")
+            .then((res)=>{
+                return res.json()
+            })
+            .then((mes)=>{
+                details(mes)
+
+            })
+            .catch((error)=>{
+                console.log(error)
+            })
+       }
+
+        function details(data){
+            console.log(data)
+            document.getElementById("city").innerHTML=""+data.name;
+            document.getElementById("temp").innerHTML=""+(Math.round(data.main.temp))+"&deg;C";
+            document.getElementById("wind1").innerHTML=""+data.wind.speed+"m/s";
+            let sunrise=convert(data.sys.sunrise);
+            document.getElementById("sunrise").innerHTML=""+sunrise;
+            
+            let sunset=convert(data.sys.sunset);
+            document.getElementById("sunset").innerHTML=""+sunset;
+        }
+
+        function convert(time){
+            let date= new Date(time*1000)
+            return date.toLocaleTimeString();
+        }
+
+        function SearchCity(){
+            let city=document.getElementById("i1").value;
+            Search(city);
+        }
+
+
+     </script>
+
+</body>
+</html>
